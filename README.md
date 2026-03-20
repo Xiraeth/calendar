@@ -1,5 +1,7 @@
 # React Calendar
 
+[![View on netlify](https://api.netlify.com/api/v1/badges/9d541517-d03c-44d7-b3c1-585c49fb7f2e/deploy-status)](https://basic-react-calendar.netlify.app/)
+
 A personal calendar app built with React, TypeScript and Vite. Basically a spin-off of Google Calendar, just wanted to limit test and see how hard it would be to make one, especially with the help of AI. _GPT-5.3 Codex_ helped make this happen in a very short amount of time.
 
 ## Features
