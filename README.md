@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# React Calendar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal calendar app built with React, TypeScript and Vite. Basically a spin-off of Google Calendar, just wanted to limit test and see how hard it would be to make one, especially with the help of AI. _GPT-5.3 Codex_ helped make this happen in a very short amount of time.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Create, edit, and delete calendar events
+- Multiple timeline views: `1`, `3`, `5`, `7`, and `14` days
+- Week mode (`7` days) starts on Monday
+- Compact day headers in `14`-day mode (`dd/mm`)
+- Event quick preview modal with event details and actions
+- Drag and drop events to move them to a new day/time
+- Live drop preview while dragging, with 15-minute snapping
+- Current-time indicator on today
+- Event data persisted in browser `localStorage`
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
 
-## Expanding the ESLint configuration
+## Getting started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1) Install dependencies
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2) Start development server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Open the local URL shown in the terminal.
+
+## Available scripts
+
+- `npm run dev` - run the app in development mode
+- `npm run build` - type-check and build production assets
+- `npm run preview` - preview the production build locally
+- `npm run lint` - run lint checks
+
+## Data persistence
+
+- Events are stored in `localStorage` under `calendar-events`.
+- Date/view selections are stored in `sessionStorage`.
+
+## Notes
+
+- The app currently uses browser-only storage (no backend/database).
+- Clearing browser storage will remove saved events and preferences.
