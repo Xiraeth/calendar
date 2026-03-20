@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  font-size: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family:
+    "Google Sans", "Google Sans Text", "Roboto", "Segoe UI", "Helvetica Neue",
+    Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #dbdbdb;
+  color: #333;
+}
+
+.preview-event-title {
+  font-family:
+    "Roboto Mono", "Google Sans", "Google Sans Text", "Roboto", sans-serif;
+}
