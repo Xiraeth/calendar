@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateContext } from "./DateContext";
 import {
   DEFAULT_VISIBLE_DAY_COUNT,
+  getNormalizedVisibleDayCountForWidth,
   VISIBLE_DAY_OPTIONS,
 } from "../calendarConfig";
 
@@ -54,11 +55,18 @@ export default function DateProvider({
   children: React.ReactNode;
 }) {
   const parsedVisibleDayCount = Number(sessionStorage.getItem("visibleDayCount"));
-  const initialVisibleDayCount = VISIBLE_DAY_OPTIONS.includes(
+  const requestedInitialVisibleDayCount = VISIBLE_DAY_OPTIONS.includes(
     parsedVisibleDayCount as (typeof VISIBLE_DAY_OPTIONS)[number],
   )
     ? parsedVisibleDayCount
     : DEFAULT_VISIBLE_DAY_COUNT;
+  const initialVisibleDayCount =
+    typeof window === "undefined"
+      ? requestedInitialVisibleDayCount
+      : getNormalizedVisibleDayCountForWidth(
+          requestedInitialVisibleDayCount,
+          window.innerWidth,
+        );
 
   const now = new Date();
 
@@ -99,6 +107,28 @@ export default function DateProvider({
   const [selectedFullDate, setSelectedFullDate] = useState<Date>(
     initialSelectedFullDate,
   );
+
+  useEffect(() => {
+    const syncVisibleDayCountToViewport = () => {
+      setVisibleDayCount((currentVisibleDayCount) => {
+        const nextVisibleDayCount = getNormalizedVisibleDayCountForWidth(
+          currentVisibleDayCount,
+          window.innerWidth,
+        );
+        if (nextVisibleDayCount === currentVisibleDayCount) {
+          return currentVisibleDayCount;
+        }
+        sessionStorage.setItem("visibleDayCount", String(nextVisibleDayCount));
+        return nextVisibleDayCount;
+      });
+    };
+
+    syncVisibleDayCountToViewport();
+    window.addEventListener("resize", syncVisibleDayCountToViewport);
+    return () => {
+      window.removeEventListener("resize", syncVisibleDayCountToViewport);
+    };
+  }, []);
 
   return (
     <DateContext.Provider

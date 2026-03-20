@@ -3,13 +3,18 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Button from "./button";
-import { VISIBLE_DAY_OPTIONS } from "../calendarConfig";
+import { getAllowedVisibleDayOptionsForWidth } from "../calendarConfig";
 import { useDateContext } from "../context/useDateContext";
 
 export default function DayRangeSelector() {
   const { visibleDayCount, setVisibleDayCount } = useDateContext();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(() =>
+    typeof window === "undefined" ? 1024 : window.innerWidth,
+  );
   const containerRef = useRef<HTMLDivElement>(null);
+  const allowedOptions = getAllowedVisibleDayOptionsForWidth(viewportWidth);
+  const hasMultipleOptions = allowedOptions.length > 1;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -30,6 +35,16 @@ export default function DayRangeSelector() {
     };
   }, [isDropdownOpen]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -37,12 +52,17 @@ export default function DayRangeSelector() {
       onClick={(e) => e.stopPropagation()}
     >
       <Button
-        width="w-[110px]"
+        width="w-[96px] sm:w-[110px]"
         text={`${visibleDayCount}-day`}
         className="h-10 bg-white border-slate-300 text-slate-700 hover:bg-slate-50"
-        onClick={() => setIsDropdownOpen((prev) => !prev)}
+        onClick={() => {
+          if (!hasMultipleOptions) {
+            return;
+          }
+          setIsDropdownOpen((prev) => !prev);
+        }}
         iconAfter={
-          isDropdownOpen ? (
+          !hasMultipleOptions ? null : isDropdownOpen ? (
             <ChevronUp className="size-4" />
           ) : (
             <ChevronDown className="size-4" />
@@ -50,9 +70,9 @@ export default function DayRangeSelector() {
         }
       />
 
-      {isDropdownOpen && (
-        <div className="absolute top-11 bg-white w-[110px] rounded-lg border border-slate-200 shadow-lg flex flex-col z-50 overflow-hidden">
-          {VISIBLE_DAY_OPTIONS.map((option) => (
+      {isDropdownOpen && hasMultipleOptions && (
+        <div className="absolute top-11 bg-white w-[96px] sm:w-[110px] rounded-lg border border-slate-200 shadow-lg flex flex-col z-50 overflow-hidden">
+          {allowedOptions.map((option) => (
             <button
               type="button"
               key={option}

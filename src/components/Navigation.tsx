@@ -59,9 +59,12 @@ export default function Navigation() {
     selectedDate,
   );
 
-  const handleCreateEvent = useCallback((created: Event) => {
-    createEvent(created);
-  }, [createEvent]);
+  const handleCreateEvent = useCallback(
+    (created: Event) => {
+      createEvent(created);
+    },
+    [createEvent],
+  );
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
@@ -111,7 +114,7 @@ export default function Navigation() {
   };
 
   return (
-    <header className="w-full h-[88px] border-b">
+    <header className="w-full border-b">
       <NewEventModal
         key={modalKey}
         isOpen={isNewEventModalOpen}
@@ -119,41 +122,44 @@ export default function Navigation() {
         onCreate={handleCreateEvent}
         defaultDate={defaultEventDate}
       />
-      <div className="h-full w-full rounded-xl border border-slate-300/60 bg-gradient-to-b from-slate-100 to-slate-200/80 shadow-sm px-4 flex items-center justify-between gap-3">
-        <div className="flex gap-3 items-center min-w-0">
-          <Button
-            iconBefore={<Plus className="size-4" />}
-            text="New Event"
-            onClick={() => setIsNewEventModalOpen(true)}
-            className="bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 shadow-md"
-          />
-          <div className="min-w-0">
-            <p className="font-mono text-lg md:text-xl text-slate-800 font-semibold truncate min-w-[300px]">
-              {dateString}
-            </p>
+      <div className="w-full rounded-xl border border-slate-300/60 bg-gradient-to-b from-slate-100 to-slate-200/80 shadow-sm px-2 py-2 sm:px-4 lg:h-[88px] lg:flex lg:items-center lg:justify-between lg:gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 lg:flex-1">
+          <div className="flex gap-2 sm:gap-3 items-center min-w-0 flex-1 lg:flex-nowrap">
+            <Button
+              iconBefore={<Plus className="size-4" />}
+              text="New Event"
+              onClick={() => setIsNewEventModalOpen(true)}
+              className="bg-indigo-600 border-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 shadow-md"
+              textClassName="hidden sm:inline"
+            />
+            <div className="min-w-0">
+              <p className="font-mono text-base sm:text-lg md:text-xl text-slate-800 font-semibold truncate min-w-0">
+                {dateString}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-2 items-center justify-center shrink-0">
+            <IconNavigationButton
+              icon={<ChevronLeft className="size-4" />}
+              label="Go to previous day"
+              onClick={previousHandler}
+            />
+            <Button
+              text="Today"
+              onClick={todayHandler}
+              className="h-10 bg-white border-slate-300 text-slate-700 hover:bg-slate-50"
+            />
+            <IconNavigationButton
+              icon={<ChevronRight className="size-4" />}
+              label="Go to next day"
+              onClick={nextHandler}
+            />
           </div>
         </div>
 
-        <div className="flex gap-2 items-center justify-center">
-          <IconNavigationButton
-            icon={<ChevronLeft className="size-4" />}
-            label="Go to previous day"
-            onClick={previousHandler}
-          />
-          <Button
-            text="Today"
-            onClick={todayHandler}
-            className="h-10 bg-white border-slate-300 text-slate-700 hover:bg-slate-50"
-          />
-          <IconNavigationButton
-            icon={<ChevronRight className="size-4" />}
-            label="Go to next day"
-            onClick={nextHandler}
-          />
-        </div>
-
-        <div className="flex gap-2 items-center justify-center">
-          <span className="hidden xl:inline-flex items-center rounded-md border border-slate-300 bg-white/80 px-2.5 h-10 text-xs text-slate-600 select-none pointer-events-none">
+        <div className="mt-2 flex flex-wrap items-center gap-2 justify-end lg:mt-0 lg:shrink-0">
+          <span className="hidden 2xl:inline-flex items-center rounded-md border border-slate-300 bg-white/80 px-2.5 h-10 text-xs text-slate-600 select-none pointer-events-none">
             {timezoneLabel}
           </span>
           <DayRangeSelector />
